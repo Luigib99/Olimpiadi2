@@ -29,5 +29,16 @@ public class SportService {
         sportRepository.deleteSport(sport);
     }
 
+    //UPDATE
+    public void updateSport(int idSport,String nomeSport,int numeroGiocatori, int choiceUpdate)
+    {
+        Sport sport = new Sport();
+        sport.setId(idSport);
+        sport.setNomeSport(nomeSport);
+        sport.setNumeroGiocatori(numeroGiocatori);
+        int ChoiceUpdate = choiceUpdate;
+        sportRepository.updateSport(sport, ChoiceUpdate);
+    }
+
 
 }

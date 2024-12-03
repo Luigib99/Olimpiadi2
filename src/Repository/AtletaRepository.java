@@ -28,7 +28,8 @@ public class AtletaRepository {
         String query =
                 "SELECT a.id,a.nome,a.cognome,a.altezza,a.dataNascita, s.nomeSport "+
                 "FROM Atleta a "+
-                "JOIN Sport s ON s.id = a.idSport";
+                "JOIN Sport s ON s.id = a.idSport "+
+                "ORDER BY a.id ASC";
         try {
             Connection c = DbConnection.openConnection();
             Statement stmt = c.createStatement();
@@ -84,7 +85,6 @@ public class AtletaRepository {
 
     //UPDATE
     public void updateAtleta(Atleta atleta, int choiceUpdate) {
-        AtletaController atletaController = new AtletaController();
         String query;
 
         if (choiceUpdate==1)
@@ -108,22 +108,23 @@ public class AtletaRepository {
         else if (choiceUpdate==4)
         {
             query = "UPDATE Atleta SET " +
-                    "altezza ="+atleta.getAltezza() +
+                    "altezza ="+atleta.getAltezza() + " "+
                     "WHERE id = " + atleta.getId();
         }
         else if (choiceUpdate==5)
         {
             query = "UPDATE Atleta SET " +
-                    "idSport ="+atleta.getIdSport() +
+                    "idSport = "+atleta.getIdSport() + " " +
                     "WHERE id = " + atleta.getId();
         }
         else
         {
-            query = "UPDATE Atleta SET" +
-                    "nome='"+atleta.getNome()+ "'" +
-                    "cognome='"+atleta.getCognome()+ "'"+
-                    "dataNascita='"+atleta.getDataNascita()+"'"+
-                    "altezza="+atleta.getAltezza()+
+            query = "UPDATE Atleta SET " +
+                    "nome='"+atleta.getNome()+ "' ," +
+                    "cognome='"+atleta.getCognome()+ "' ,"+
+                    "dataNascita='"+atleta.getDataNascita()+"' ,"+
+                    "altezza="+atleta.getAltezza()+ " ," +
+                    "idSport = "+atleta.getIdSport() + " " +
                     "WHERE id = " + atleta.getId();
         }
 
@@ -133,7 +134,7 @@ public class AtletaRepository {
             Statement stmt = c.createStatement();
             stmt.execute(query);
         }
-        catch (ClassNotFoundException | SQLException e)
+        catch (Exception e)
         {
             System.err.println(e.getMessage());
             System.exit(0);

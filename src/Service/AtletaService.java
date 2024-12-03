@@ -35,7 +35,7 @@ public class AtletaService {
     public void deleteAtleta(int idAtleta)
     {
         //istanziamo l'atleta
-        Atleta atleta=  new Atleta();
+        Atleta atleta =  new Atleta();
 
         //mettiamo i parameti necessari
         atleta.setId(idAtleta);
@@ -43,7 +43,7 @@ public class AtletaService {
     }
 
     //UPDATE
-    public void updateAtleta(int id, String nome, String cognome, LocalDate dataNascita, int altezza, Sport sport, int choiceUpdate)
+    public void updateAtleta(int id, String nome, String cognome, LocalDate dataNascita, int altezza, Sport sport, int idSport, int choiceUpdate)
     {
         //istanziamo l'atleta
         Atleta atleta = new Atleta();
@@ -54,8 +54,9 @@ public class AtletaService {
         atleta.setCognome(cognome);
         atleta.setDataNascita(dataNascita);
         atleta.setAltezza(altezza);
+        atleta.setIdSport(idSport);
         atleta.setSport(sport);
-        int ChoiceUpdate= choiceUpdate;
+        int ChoiceUpdate = choiceUpdate;
         atletaRepository.updateAtleta(atleta, ChoiceUpdate);
     }
 }

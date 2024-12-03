@@ -67,10 +67,28 @@ public class SportRepository {
     }
 
     //UPDATE
-    /*
-    public void updateNomeAtleta(Atleta atleta) {
-        String query = "UPDATE Atleta SET " +
-                "nome ='"+atleta.getNome()+ "'";
+
+    public void updateSport(Sport sport, int ChoiceUpdate) {
+        String query;
+            if(ChoiceUpdate==1)
+            {
+                query = "UPDATE Sport SET " +
+                        "nomeSport ='"+sport.getNomeSport()+ "' "+
+                        "WHERE id = " + sport.getId();
+            }
+            else if (ChoiceUpdate==2)
+            {
+                query = "UPDATE Sport SET " +
+                        "numeroGiocatori ='"+sport.getNumeroGiocatori()+ "' "+
+                        "WHERE id = " + sport.getId();
+            }
+            else
+            {
+                query = "UPDATE Sport SET " +
+                        "nomeSport ='"+sport.getNomeSport()+ "', "+
+                        "numeroGiocatori ='"+sport.getNumeroGiocatori()+ "' "+
+                        "WHERE id = " + sport.getId();
+            }
 
         try
         {
@@ -83,6 +101,6 @@ public class SportRepository {
             System.err.println(e.getMessage());
             System.exit(0);
         }
-    }*/
+    }
 }
 

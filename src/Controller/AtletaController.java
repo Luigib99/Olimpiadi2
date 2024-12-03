@@ -4,10 +4,10 @@ import Service.*;
 import Entity.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class AtletaController {
+    String tasto;
     Scanner scanner = new Scanner(System.in);
     SportService sportService = new SportService();
     AtletaService atletaService = new AtletaService();
@@ -28,12 +28,10 @@ public class AtletaController {
        if (listaSport.size() == 0)
        {
            System.out.println("non sono ancora presenti sport");
-           System.out.println("premere un tasto per continuare");
-           String tasto = scanner.nextLine();
        }
        else
        {
-           sportController.readSport(true);
+           sportController.readSport(false);
            int idSport = scanner.nextInt();
            for (int i = 0; i < listaSport.size(); i++)
            {
@@ -45,70 +43,83 @@ public class AtletaController {
                }
            }
        }
+       scanner.nextLine();
+       System.out.println("\nATLETA CREATO");
+       System.out.println("\npremere un tasto per continuare");
+       tasto = scanner.nextLine();
     }
 
-    public void readAtleta()
+    public void readAtleta(boolean completo)
     {
         List<Atleta> listaAtleta = atletaService.readAtleta();
         if (listaAtleta.size() == 0)
         {
             System.out.println("non sono ancora presenti atleti");
+            System.out.println("\npremere un tasto per continuare");
+            tasto = scanner.nextLine();
         }
         else
         {
-            for (Atleta atleta : listaAtleta)
-            {
-                Sport sport = atleta.getSport();
-                if (sport != null)
-                {
+            if (completo) {
+                System.out.println("\nLISTA ATLETI\n");
+                for (Atleta atleta : listaAtleta) {
+                    Sport sport = atleta.getSport();
                     System.out.println(atleta.getId() + " " +
                             atleta.getNome() + " " +
                             atleta.getCognome() + " " +
+                            atleta.getDataNascita() + " " +
+                            atleta.getAltezza() + " " +
                             sport.getNomeSport());
                 }
-                else
+                System.out.println("\npremere un tasto per continuare");
+                tasto = scanner.nextLine();
+            }
+            else
+            {
+                for (Atleta atleta : listaAtleta)
                 {
-                    System.out.println(atleta.getId() + " " +
+                    System.out.println("id:" + atleta.getId() + " " +
                             atleta.getNome() + " " +
-                            atleta.getCognome() + " " +
-                            "sport non assegnato");
+                            atleta.getCognome());
                 }
             }
         }
     }
 
-    public void deleteAtleta () {
+    public void deleteAtleta ()
+    {
 
         List<Atleta> listaAtleta = atletaService.readAtleta();
 
-        if (listaAtleta.size() == 0) {
-            System.out.println("non sono ancora presenti atleti");
-        } else {
-            System.out.println("Elimina l'atleta digitando l'id: ");
-            readAtleta();
-            int id = scanner.nextInt();
-            SportService sportService = new SportService();
-            sportService.deleteSport(id);
+        if (listaAtleta.size() == 0)
+        {
+            System.out.println("\nnon sono ancora presenti atleti");
         }
-        System.out.println("premere un tasto per continuare");
-        String tasto = scanner.nextLine();
+        else
+        {
+            System.out.println("Elimina l'atleta digitando l'id: ");
+            readAtleta(false);
+            int id = scanner.nextInt();
+            atletaService.deleteAtleta(id);
+            System.out.println("\nATLETA ELIMINATO");
+            scanner.nextLine();
+        }
+        System.out.println("\npremere un tasto per continuare");
+        tasto=scanner.nextLine();
+
     }
 
     public void updateAtleta()
     {
         List<Atleta> listaAtleta = atletaService.readAtleta();
-
-
         if (listaAtleta.size() == 0)
         {
             System.out.println("non sono ancora presenti atleti");
-            System.out.println("premere un tasto per continuare");
-            String tasto = scanner.nextLine();
         }
         else
         {
-            System.out.println("Modifica l'atleta digitando l'id: ");
-            readAtleta();
+            System.out.println("\nModifica l'atleta digitando l'id:\n");
+            readAtleta(false);
             int id = scanner.nextInt();
             for (Atleta atleta : listaAtleta)
             {
@@ -118,6 +129,7 @@ public class AtletaController {
                     String cognome=atleta.getCognome();
                     LocalDate dataNascita=atleta.getDataNascita();
                     int altezza=atleta.getAltezza();
+                    int idSport=atleta.getIdSport();
                     Sport sport=atleta.getSport();
 
                     System.out.println("Scegli quale parametro modificare digitando il numero");
@@ -126,7 +138,8 @@ public class AtletaController {
                     System.out.println("3) DATA DI NASCITA, attuale: " + atleta.getDataNascita());
                     System.out.println("4) ALTEZZA, attuale: " + atleta.getAltezza());
                     System.out.println("5) SPORT : " + atleta.getSport().getNomeSport());
-                    System.out.println("ALTRO) TUTTI I PARAMETRI");
+                    System.out.println("6) TUTTI I PARAMETRI");
+                    System.out.println("ALTRO TASTO) INDIETRO");
                     int choiceUpdate = scanner.nextInt();
                     scanner.nextLine();
 
@@ -154,7 +167,7 @@ public class AtletaController {
                     {
                         System.out.println("Digita il numero corrispondente al nuovo sport");
                         sportController.readSport(true);
-                        int idSport = scanner.nextInt();
+                        idSport = scanner.nextInt();
                         List<Sport> listaSport = sportService.readSport();
                         for (int i = 0; i < listaSport.size(); i++)
                         {
@@ -164,7 +177,38 @@ public class AtletaController {
                             }
                         }
                     }
-                    atletaService.updateAtleta(id,nome,cognome,dataNascita,altezza,sport, choiceUpdate);
+                    else if (choiceUpdate == 6)
+                    {
+                        System.out.println("Scrivi il nuovo nome");
+                        nome=scanner.nextLine();
+                        System.out.println("Scrivi il nuovo cognome");
+                        cognome=scanner.nextLine();
+                        System.out.println("Scrivi la nuova data nascita (yyyy-mm-dd)");
+                        dataNascita = LocalDate.parse(scanner.nextLine());
+                        System.out.println("Scrivi la nuova altezza");
+                        altezza=scanner.nextInt();
+                        System.out.println("Digita il numero corrispondente al nuovo sport");
+                        sportController.readSport(true);
+                        idSport = scanner.nextInt();
+                        List<Sport> listaSport = sportService.readSport();
+                        for (int i = 0; i < listaSport.size(); i++)
+                        {
+                            if (listaSport.get(i).getId() == idSport)
+                            {
+                                sport = listaSport.get(i);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("\nINDIETRO \n");
+                        break;
+                    }
+                    scanner.nextLine();
+                    System.out.println("\nMODIFICA EFFETTUATA");
+                    atletaService.updateAtleta(id,nome,cognome,dataNascita,altezza,sport,idSport,choiceUpdate);
+                    System.out.println("\npremere un tasto per continuare\n");
+                    tasto=scanner.nextLine();
                 }
             }
         }
