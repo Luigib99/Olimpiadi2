@@ -11,6 +11,7 @@ public class AtletaController {
     Scanner scanner = new Scanner(System.in);
     SportService sportService = new SportService();
     AtletaService atletaService = new AtletaService();
+    SportController sportController = new SportController();
 
     public void createAtleta()
     {
@@ -23,14 +24,16 @@ public class AtletaController {
        System.out.println("Inserisci l'altezza del Atleta");
        int altezza = scanner.nextInt();
        System.out.println("Inserisci l'id dello sport dalla lista");
-        List<Sport> listaSport = sportService.readSport();
+       List<Sport> listaSport = sportService.readSport();
        if (listaSport.size() == 0)
        {
            System.out.println("non sono ancora presenti sport");
+           System.out.println("premere un tasto per continuare");
+           String tasto = scanner.nextLine();
        }
        else
        {
-           sportService.readSport();
+           sportController.readSport(true);
            int idSport = scanner.nextInt();
            for (int i = 0; i < listaSport.size(); i++)
            {
@@ -42,8 +45,6 @@ public class AtletaController {
                }
            }
        }
-        System.out.println("premere un tasto per continuare");
-        String tasto = scanner.nextLine();
     }
 
     public void readAtleta()
@@ -74,8 +75,6 @@ public class AtletaController {
                 }
             }
         }
-        System.out.println("premere un tasto per continuare");
-        String tasto = scanner.nextLine();
     }
 
     public void deleteAtleta () {
@@ -99,9 +98,12 @@ public class AtletaController {
     {
         List<Atleta> listaAtleta = atletaService.readAtleta();
 
+
         if (listaAtleta.size() == 0)
         {
             System.out.println("non sono ancora presenti atleti");
+            System.out.println("premere un tasto per continuare");
+            String tasto = scanner.nextLine();
         }
         else
         {
@@ -112,14 +114,59 @@ public class AtletaController {
             {
                 if (atleta.getId() == id)
                 {
-                    System.out.println("Modifica il nome del atleta");
-                    String nome = scanner.nextLine();
+                    String nome=atleta.getNome();
+                    String cognome=atleta.getCognome();
+                    LocalDate dataNascita=atleta.getDataNascita();
+                    int altezza=atleta.getAltezza();
+                    Sport sport=atleta.getSport();
 
-                    atletaService.updateAtleta(id,nome);
+                    System.out.println("Scegli quale parametro modificare digitando il numero");
+                    System.out.println("1) NOME, attuale: " + atleta.getNome());
+                    System.out.println("2) COGNOME, attuale: " + atleta.getCognome());
+                    System.out.println("3) DATA DI NASCITA, attuale: " + atleta.getDataNascita());
+                    System.out.println("4) ALTEZZA, attuale: " + atleta.getAltezza());
+                    System.out.println("5) SPORT : " + atleta.getSport().getNomeSport());
+                    System.out.println("ALTRO) TUTTI I PARAMETRI");
+                    int choiceUpdate = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (choiceUpdate == 1)
+                    {
+                        System.out.println("Scrivi il nuovo nome");
+                        nome=scanner.nextLine();
+                    }
+                    else if (choiceUpdate == 2)
+                    {
+                        System.out.println("Scrivi il nuovo cognome");
+                        cognome=scanner.nextLine();
+                    }
+                    else if (choiceUpdate == 3)
+                    {
+                        System.out.println("Scrivi la nuova data nascita (yyyy-mm-dd)");
+                        dataNascita = LocalDate.parse(scanner.nextLine());
+                    }
+                    else if (choiceUpdate == 4)
+                    {
+                        System.out.println("Scrivi la nuova altezza");
+                        altezza=scanner.nextInt();
+                    }
+                    else if (choiceUpdate == 5)
+                    {
+                        System.out.println("Digita il numero corrispondente al nuovo sport");
+                        sportController.readSport(true);
+                        int idSport = scanner.nextInt();
+                        List<Sport> listaSport = sportService.readSport();
+                        for (int i = 0; i < listaSport.size(); i++)
+                        {
+                            if (listaSport.get(i).getId() == idSport)
+                            {
+                                sport = listaSport.get(i);
+                            }
+                        }
+                    }
+                    atletaService.updateAtleta(id,nome,cognome,dataNascita,altezza,sport, choiceUpdate);
                 }
             }
         }
-        System.out.println("premere un tasto per continuare");
-        String tasto = scanner.nextLine();
     }
 }

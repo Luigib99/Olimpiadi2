@@ -1,5 +1,6 @@
 package Repository;
 import Config.DbConnection;
+import Controller.AtletaController;
 import Entity.Atleta;
 import Entity.Sport;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class AtletaRepository {
     //CREATE
     public void createAtleta(Atleta atleta) {
         String query =
-                "INSERT INTO Atleta (idSport,nome,cognome,dataNascita,altezza) VALUES ('" + atleta.getIdSport()+"','"+ atleta.getCognome() + "','"+ atleta.getDataNascita()+"','"+atleta.getAltezza()+"')";
+                "INSERT INTO Atleta (idSport,nome,cognome,dataNascita,altezza) VALUES ('" + atleta.getIdSport()+"','"+ atleta.getNome() + "','"+ atleta.getCognome() + "','"+ atleta.getDataNascita()+"','"+atleta.getAltezza()+"')";
         try {
             Connection c = DbConnection.openConnection();
             Statement stmt = c.createStatement();
@@ -34,7 +35,7 @@ public class AtletaRepository {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next())
             {
-                //creo l'istaza di atleta
+                //creo l'istanza di atleta
                 Atleta atleta = new Atleta();
 
                 atleta.setId(rs.getInt("id"));
@@ -51,7 +52,6 @@ public class AtletaRepository {
 
                 sport.setId(rs.getInt("id"));
                 sport.setNomeSport(rs.getString("nomeSport"));
-                sport.setNumeroGiocatori(rs.getInt("numeroGiocatori"));
 
                 atleta.setSport(sport);
                 listaAtleti.add(atleta);
@@ -83,9 +83,49 @@ public class AtletaRepository {
     }
 
     //UPDATE
-    public void updateNomeAtleta(Atleta atleta) {
-        String query = "UPDATE Atleta SET " +
-                "nome ='"+atleta.getNome()+ "'";
+    public void updateAtleta(Atleta atleta, int choiceUpdate) {
+        AtletaController atletaController = new AtletaController();
+        String query;
+
+        if (choiceUpdate==1)
+        {
+            query = "UPDATE Atleta SET " +
+                    "nome = '" + atleta.getNome() + "' " +
+                    "WHERE id = "  + atleta.getId();
+        }
+        else if (choiceUpdate==2)
+        {
+            query = "UPDATE Atleta SET " +
+                    "cognome ='"+atleta.getCognome()+ "'"+
+                    "WHERE id = " + atleta.getId();
+        }
+        else if (choiceUpdate==3)
+        {
+            query = "UPDATE Atleta SET " +
+                    "dataNascita ='"+atleta.getDataNascita()+ "'" +
+                    "WHERE id = " + atleta.getId();
+        }
+        else if (choiceUpdate==4)
+        {
+            query = "UPDATE Atleta SET " +
+                    "altezza ="+atleta.getAltezza() +
+                    "WHERE id = " + atleta.getId();
+        }
+        else if (choiceUpdate==5)
+        {
+            query = "UPDATE Atleta SET " +
+                    "idSport ="+atleta.getIdSport() +
+                    "WHERE id = " + atleta.getId();
+        }
+        else
+        {
+            query = "UPDATE Atleta SET" +
+                    "nome='"+atleta.getNome()+ "'" +
+                    "cognome='"+atleta.getCognome()+ "'"+
+                    "dataNascita='"+atleta.getDataNascita()+"'"+
+                    "altezza="+atleta.getAltezza()+
+                    "WHERE id = " + atleta.getId();
+        }
 
         try
         {

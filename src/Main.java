@@ -50,7 +50,7 @@ public class Main {
                     }
                     else if (choice2==4)
                     {
-                        sportController.readSport();
+                        sportController.readSport(false);
                     }
                     else if (choice2==8)
                     {

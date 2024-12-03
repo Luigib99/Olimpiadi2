@@ -2,6 +2,8 @@ package Controller;
 
 import Service.*;
 import Entity.*;
+
+import javax.swing.*;
 import java.util.*;
 
 import java.util.Scanner;
@@ -29,24 +31,34 @@ public class SportController {
 
     }
 
-    public void readSport()
+    public void readSport(boolean readAtleta)
     {
         List<Sport> listaSport = sportService.readSport();
         if (listaSport.size()==0)
         {
             System.out.println("non sono presenti sport salvati");
+            System.out.println("premere un tasto per continuare");
+            String tasto = scanner.nextLine();
         }
-        else
-        {
-            for(Sport sport : listaSport)
+        else {
+            if (readAtleta) {
+                for (Sport sport : listaSport) {
+                    System.out.println(sport.getId() + " " +
+                            sport.getNomeSport());
+                }
+            }
+            else
             {
-                System.out.println(sport.getId() + " " +
-                        sport.getNomeSport() + " " +
-                        sport.getNumeroGiocatori());                        ;
+                for (Sport sport : listaSport)
+                {
+                    System.out.println(sport.getId() + " " +
+                            sport.getNomeSport() + " " +
+                            sport.getNumeroGiocatori());
+                }
+                System.out.println("premere un tasto per continuare");
+                String tasto = scanner.nextLine();
             }
         }
-        System.out.println("premere un tasto per continuare");
-        String tasto = scanner.nextLine();
     }
 
     public void deleteSport()
