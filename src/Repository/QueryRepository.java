@@ -93,5 +93,84 @@ public class QueryRepository {
         return listaAtletiSport;
     }
 
+    public ArrayList<Sport> query4(int choice3)
+    {
+        ArrayList<Sport> listaNumeroAtletiSport = new ArrayList<>();
+        String query =
+                "SELECT s.nomeSport, COUNT (a.nome) AS numeroAtleti " +
+                        "FROM Atleta a "+
+                        "JOIN Sport s ON a.idSport=s.id "+
+                        "WHERE s.id ='"+choice3+"' " +
+                        "GROUP BY s.nomeSport";
+        try {
+            Connection c = DbConnection.openConnection();
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next())
+            {
+                Sport sport = new Sport();
+                sport.setNomeSport(rs.getString("nomeSport"));
+                listaNumeroAtletiSport.add(sport);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println(e.getMessage());
+            System.exit(0);
+        }
+        return listaNumeroAtletiSport;
+    }
+
+    public ArrayList<Sport> query5()
+    {
+        ArrayList<Sport> listaSportConGiocatori = new ArrayList<>();
+        String query =
+                "SELECT s.nomeSport, COUNT (a.nome) AS numeroAtleti " +
+                        "FROM Atleta a "+
+                        "JOIN Sport s ON a.idSport=s.id "+
+                        "GROUP BY s.nomeSport " +
+                        "HAVING COUNT (a.nome)>=2";
+        try {
+            Connection c = DbConnection.openConnection();
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next())
+            {
+                Sport sport = new Sport();
+                sport.setNomeSport(rs.getString("nomeSport"));
+                listaSportConGiocatori.add(sport);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println(e.getMessage());
+            System.exit(0);
+        }
+        return listaSportConGiocatori;
+    }
+
+    public ArrayList<Atleta> query6()
+    {
+        ArrayList<Atleta> listaAtletiAlti = new ArrayList<>();
+        String query =
+                "SELECT nome,cognome,altezza " +
+                        "FROM Atleta "+
+                        "WHERE altezza>(SELECT AVG(altezza) "+
+                                        "FROM Atleta) ";
+        try {
+            Connection c = DbConnection.openConnection();
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next())
+            {
+                Atleta atleta = new Atleta();
+                atleta.setNome(rs.getString("nome"));
+                atleta.setCognome(rs.getString("cognome"));
+                atleta.setAltezza(rs.getInt("altezza"));
+                listaAtletiAlti.add(atleta);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println(e.getMessage());
+            System.exit(0);
+        }
+        return listaAtletiAlti;
+    }
+
 
 }

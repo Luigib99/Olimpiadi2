@@ -117,6 +117,9 @@ public class Main {
                     System.out.println("1 visualizza sport di squadra");
                     System.out.println("2 visualizza i tennisti nati dopo il 2000");
                     System.out.println("3 gli atleti dello sport indicato");
+                    System.out.println("4 il numero di atleti dello sport indicato");
+                    System.out.println("5 il numero di sport con piu di due atleti salvati");
+                    System.out.println("6 i nomi degli atleti che sono più alti della media");
                     System.out.println("8 indietro al menu iniziale");
                     System.out.println("9 chiudi programma");
 
@@ -133,7 +136,22 @@ public class Main {
 
                     else if (choice2==3)
                     {
-                        queryController.query3(0);
+                        queryController.query3();
+                    }
+
+                    else if (choice2==4)
+                    {
+                        queryController.query4();
+                    }
+
+                    else if (choice2==5)
+                    {
+                        queryController.query5();
+                    }
+
+                    else if (choice2==6)
+                    {
+                        queryController.query6();
                     }
 
                     else if (choice2==8)

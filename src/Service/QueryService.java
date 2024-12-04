@@ -22,4 +22,17 @@ public class QueryService {
         return queryRepository.query3(choice3);
     }
 
+    public List<Sport> query4(int choice3)
+    {
+        return queryRepository.query4(choice3);
+    }
+
+    public List<Sport>query5()
+    {
+        return queryRepository.query5();
+    }
+    public List<Atleta>query6()
+    {
+        return queryRepository.query6();
+    }
 }
